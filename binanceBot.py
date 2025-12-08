@@ -18,8 +18,8 @@ import threading
 # In PowerShell:
 #   $env:BINANCE_API_KEY = "your_key_here"
 #   $env:BINANCE_API_SECRET = "your_secret_here"
-API_KEY = os.getenv("BINANCE_API_KEY", "")  # MUST be set via env var before --live
-API_SECRET = os.getenv("BINANCE_API_SECRET", "")  # MUST be set via env var before --live
+API_KEY = os.getenv("BINANCE_API_KEY", "WNFkSItC9GpmyuYH6wYxk7TkpIYzcijh5CHuDslg1jUDoWL7fzrUpmNDq54a5esb")  # MUST be set via env var before --live
+API_SECRET = os.getenv("BINANCE_API_SECRET", "eCI6mP0KFFxho8JXYMzndzAvkXXWjGR3Nm7QXpOKkQ8lR8gBp1tWquwpVWH1fHu2")  # MUST be set via env var before --live
 DRY_RUN = False  # FORCE LIVE: real orders will be placed. If validation fails, orders will error.
 SYMBOL = "BTCUSDT"
 BASE_ASSET = "BTC"
@@ -566,4 +566,5 @@ def main():
     logging.info("Bot stopped.")
 
 if __name__ == "__main__":
+
     main()
