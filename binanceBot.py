@@ -1,22 +1,62 @@
+
+import math
+from statistics import mean
+import logging
+import argparse
+import signal
+from datetime import datetime
+import threading
 import time
 import hmac
 import hashlib
 import requests
-import math
-from statistics import mean
-import logging
+from urllib.parse import urlencode
 import os
-import argparse
-import urllib.parse
-import signal
-from datetime import datetime
-import threading
-
-python
 from dotenv import load_dotenv
+
+# Load environment variables from .env file
 load_dotenv()
-api_key = os.getenv("API_KEY")
-api_secret = os.getenv("API_SECRET")
+
+API_KEY = os.getenv("API_KEY")
+API_SECRET = os.getenv("API_SECRET")
+
+if not API_KEY or not API_SECRET:
+    raise ValueError("API_KEY or API_SECRET not found in environment variables.")
+
+def rest_post_signed(path, params):
+    base_url = "https://api.binance.com"
+    params['timestamp'] = int(time.time() * 1000)
+    query_string = urlencode(params)
+    signature = hmac.new(
+        API_SECRET.encode('utf-8'),
+        query_string.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+    query_string += f"&signature={signature}"
+    headers = {
+        "X-MBX-APIKEY": API_KEY
+    }
+    url = f"{base_url}{path}?{query_string}"
+    
+    try:
+        response = requests.post(url, headers=headers)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Request error: {e}")
+        return None
+
+# Define order parameters
+params = {
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "type": "MARKET",
+    "quantity": "0.001"
+}
+
+# Send order
+response = rest_post_signed("/api/v3/order", params)
+print(response)
 
 # ========== CONFIG ==========
 # Read API credentials from environment when possible to avoid committing secrets in source.
@@ -574,4 +614,5 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
