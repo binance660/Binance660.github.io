@@ -12,6 +12,12 @@ import signal
 from datetime import datetime
 import threading
 
+python
+from dotenv import load_dotenv
+load_dotenv()
+api_key = os.getenv("API_KEY")
+api_secret = os.getenv("API_SECRET")
+
 # ========== CONFIG ==========
 # Read API credentials from environment when possible to avoid committing secrets in source.
 # IMPORTANT: Set your real API keys via environment variables BEFORE running with --live
@@ -568,3 +574,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
